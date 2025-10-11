@@ -116,7 +116,7 @@ app/src/main/java/com/ayaan/bazaar/
    - Create a new Firebase project
    - Enable Authentication (Email/Password)
    - Create a Firestore database
-   - Enable Firebase Storage
+   - Enable Firebase Storage(enable- a billing account)
    - Download `google-services.json` and place it in the `app/` directory
 
 3. **Build and Run**
@@ -131,6 +131,31 @@ Ensure your Firebase project has:
 - **Firestore**: Database rules configured for read/write access
 - **Storage**: Rules configured for image uploads
 
+## Firestore Rules
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{allDocuments=**} {
+      // Allow anyone to read/write all documents (for testing only)
+      allow read, write: if true;
+    }
+  }
+}
+```
+
+## Storage Rules
+```javascript
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // Allow anyone to read/write all files (for testing only)
+      allow read, write: if true;
+    }
+  }
+}
+```
 ## 📋 App Configuration
 
 - **Package Name**: `com.ayaan.bazaar`
