@@ -58,13 +58,6 @@ A modern Android marketplace application built with Jetpack Compose that allows 
 - **Firebase Storage**: Image storage and retrieval
 - **Google Services**: Firebase integration
 
-### Architecture & Patterns
-- **Clean Architecture**: Separation of concerns with domain, data, and UI layers
-- **MVVM Pattern**: Model-View-ViewModel architecture
-- **Repository Pattern**: Data abstraction layer
-- **Dependency Injection**: Koin for DI
-- **Coroutines**: Asynchronous programming
-
 ### Libraries & Dependencies
 - **Koin**: Dependency injection framework
 - **Accompanist**: Compose utilities (SwipeRefresh)
