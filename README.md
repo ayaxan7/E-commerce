@@ -6,7 +6,7 @@ A modern Android marketplace application built with Jetpack Compose that allows 
 <table>
   <tr>
     <td align="center">
-      <strong>📸 Image</strong><br>
+      <strong>ER-Diagram</strong><br>
       <img src="assets/er-diagram.png" width="250" alt="Screenshot"/>
     </td>
     <td align="center">
