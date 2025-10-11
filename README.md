@@ -13,10 +13,6 @@ A modern Android marketplace application built with Jetpack Compose that allows 
       <strong>ER-Diagram</strong><br>
       <img src="assets/er-diagram.png" width="250" alt="ER Diagram"/>
     </td>
-    <td align="center">
-      <strong>🎥 Video</strong><br>
-      <img src="media/demo_video.gif" width="250" alt="Demo Video"/>
-    </td>
   </tr>
 </table>
 
