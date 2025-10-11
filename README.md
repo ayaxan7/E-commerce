@@ -2,6 +2,16 @@
 
 A modern Android marketplace application built with Jetpack Compose that allows users to buy and sell products in a local marketplace environment.
 
+## Demo
+<p align="center">
+  <!-- App showcase image -->
+  <img src="https://github.com/ayaxan7/e-commerce/assets/er-diagram.png" alt="Bazaar App Screenshot" width="400"/>
+
+  <!-- Demo GIF -->
+  <br>
+  <img src="https://github.com/ayaan/bazaar/assets/demo.gif" alt="Bazaar App Demo" width="400"/>
+</p>
+
 ## 📱 Features
 
 ### 🔐 Authentication
