@@ -2,7 +2,7 @@
 
 A modern Android marketplace application built with Jetpack Compose that allows users to buy and sell products in a local marketplace environment.
 
-## Demo
+## Architecture
 <table>
   <tr>
     <td align="center">
