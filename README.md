@@ -2,7 +2,7 @@
 
 A modern Android marketplace application built with Jetpack Compose that allows users to buy and sell products in a local marketplace environment.
 
-## Demo
+## Architecture
 <table>
   <tr>
     <td align="center">
@@ -12,10 +12,6 @@ A modern Android marketplace application built with Jetpack Compose that allows 
     <td align="center">
       <strong>ER-Diagram</strong><br>
       <img src="assets/er-diagram.png" width="250" alt="ER Diagram"/>
-    </td>
-    <td align="center">
-      <strong>🎥 Video</strong><br>
-      <img src="media/demo_video.gif" width="250" alt="Demo Video"/>
     </td>
   </tr>
 </table>
@@ -62,13 +58,6 @@ A modern Android marketplace application built with Jetpack Compose that allows 
 - **Firebase Storage**: Image storage and retrieval
 - **Google Services**: Firebase integration
 
-### Architecture & Patterns
-- **Clean Architecture**: Separation of concerns with domain, data, and UI layers
-- **MVVM Pattern**: Model-View-ViewModel architecture
-- **Repository Pattern**: Data abstraction layer
-- **Dependency Injection**: Koin for DI
-- **Coroutines**: Asynchronous programming
-
 ### Libraries & Dependencies
 - **Koin**: Dependency injection framework
 - **Accompanist**: Compose utilities (SwipeRefresh)
@@ -112,7 +101,7 @@ app/src/main/java/com/ayaan/bazaar/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ayaxan7/E-commerce/
    cd Bazaar
    ```
 
