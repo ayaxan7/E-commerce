@@ -6,8 +6,12 @@ A modern Android marketplace application built with Jetpack Compose that allows 
 <table>
   <tr>
     <td align="center">
+      <strong>Architecture Diagram</strong><br>
+      <img src="assets/architecture-diagram.svg" width="400" alt="Architecture Diagram"/>
+    </td>
+    <td align="center">
       <strong>ER-Diagram</strong><br>
-      <img src="assets/er-diagram.png" width="250" alt="Screenshot"/>
+      <img src="assets/er-diagram.png" width="250" alt="ER Diagram"/>
     </td>
     <td align="center">
       <strong>🎥 Video</strong><br>

@@ -1,6 +1,7 @@
 package com.ayaan.bazaar.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
@@ -22,12 +23,31 @@ fun BazaarNavigation(
     authViewModel: AuthViewModel = koinViewModel()
 ) {
     val authState by authViewModel.authState.collectAsState()
-    val auth= FirebaseAuth.getInstance()
-    val user=auth.currentUser
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
+
+    // Initial destination based on current auth state
     val startDestination = if (user != null) {
         Screen.ProductList.route
     } else {
         Screen.Auth.route
+    }
+
+    // React to authentication state changes
+    LaunchedEffect(authState) {
+        if (authState == null) {
+            // User logged out, navigate to auth screen and clear back stack
+            navController.navigate(Screen.Auth.route) {
+                popUpTo(0) { inclusive = true }
+            }
+        } else {
+            // User logged in, navigate to product list if currently on auth screen
+            if (navController.currentDestination?.route == Screen.Auth.route) {
+                navController.navigate(Screen.ProductList.route) {
+                    popUpTo(Screen.Auth.route) { inclusive = true }
+                }
+            }
+        }
     }
 
     NavHost(
@@ -45,59 +65,94 @@ fun BazaarNavigation(
         }
 
         composable(Screen.ProductList.route) {
-            ProductListScreen(
-                onNavigateToCreateProduct = {
-                    navController.navigate(Screen.CreateProduct.route)
-                },
-                onNavigateToProductDetail = { productId ->
-                    navController.navigate(Screen.ProductDetail.createRoute(productId))
-                },
-                onNavigateToAuth = {
+            // Protect this screen - redirect to auth if not authenticated
+            if (authState == null) {
+                LaunchedEffect(Unit) {
                     navController.navigate(Screen.Auth.route) {
-                        popUpTo(Screen.ProductList.route) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
                     }
-                },
-                onNavigateToMyUploads = {
-                    navController.navigate(Screen.MyUploads.route)
                 }
-            )
+            } else {
+                ProductListScreen(
+                    onNavigateToCreateProduct = {
+                        navController.navigate(Screen.CreateProduct.route)
+                    },
+                    onNavigateToProductDetail = { productId ->
+                        navController.navigate(Screen.ProductDetail.createRoute(productId))
+                    },
+                    onNavigateToAuth = {
+                        // Remove direct navigation call, let the LaunchedEffect handle it
+                        authViewModel.signOut()
+                    },
+                    onNavigateToMyUploads = {
+                        navController.navigate(Screen.MyUploads.route)
+                    }
+                )
+            }
         }
 
         composable(Screen.CreateProduct.route) {
-            CreateProductScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                },
-                onNavigateToProductList = {
-                    navController.navigate(Screen.ProductList.route) {
-                        popUpTo(Screen.CreateProduct.route) { inclusive = true }
+            // Protect this screen - redirect to auth if not authenticated
+            if (authState == null) {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(0) { inclusive = true }
                     }
                 }
-            )
+            } else {
+                CreateProductScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToProductList = {
+                        navController.navigate(Screen.ProductList.route) {
+                            popUpTo(Screen.CreateProduct.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
         }
 
         composable(
             route = Screen.ProductDetail.route,
             arguments = Screen.ProductDetail.arguments
         ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("productId") ?: ""
-            ProductDetailScreen(
-                productId = productId,
-                onNavigateBack = {
-                    navController.popBackStack()
+            // Protect this screen - redirect to auth if not authenticated
+            if (authState == null) {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
-            )
+            } else {
+                val productId = backStackEntry.arguments?.getString("productId") ?: ""
+                ProductDetailScreen(
+                    productId = productId,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
 
         composable(Screen.MyUploads.route) {
-            MyUploadsScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                },
-                onNavigateToProductDetail = { productId ->
-                    navController.navigate(Screen.ProductDetail.createRoute(productId))
+            // Protect this screen - redirect to auth if not authenticated
+            if (authState == null) {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
-            )
+            } else {
+                MyUploadsScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToProductDetail = { productId ->
+                        navController.navigate(Screen.ProductDetail.createRoute(productId))
+                    }
+                )
+            }
         }
     }
 }

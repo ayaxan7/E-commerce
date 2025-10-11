@@ -3,7 +3,7 @@ package com.ayaan.bazaar.data.firebase
 import android.net.Uri
 import com.ayaan.bazaar.domain.model.Product
 import com.ayaan.bazaar.domain.repository.ProductRepository
-import com.ayaan.bazaar.util.PRODCUTS_DB
+import com.ayaan.bazaar.util.PRODUCTS_DB
 import com.ayaan.bazaar.util.Result
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,7 +42,7 @@ class FirestoreProductRepositoryImpl(
             )
 
             // Save product to Firestore
-            firestore.collection(PRODCUTS_DB)
+            firestore.collection(PRODUCTS_DB)
                 .document(productId)
                 .set(productWithImages)
                 .await()
@@ -54,7 +54,7 @@ class FirestoreProductRepositoryImpl(
     }
 
     override fun getProducts(): Flow<List<Product>> = callbackFlow {
-        val listener = firestore.collection(PRODCUTS_DB)
+        val listener = firestore.collection(PRODUCTS_DB)
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -76,7 +76,7 @@ class FirestoreProductRepositoryImpl(
 
     override suspend fun getProduct(productId: String): Result<Product> {
         return try {
-            val doc = firestore.collection(PRODCUTS_DB)
+            val doc = firestore.collection(PRODUCTS_DB)
                 .document(productId)
                 .get()
                 .await()
@@ -91,7 +91,7 @@ class FirestoreProductRepositoryImpl(
     }
 
     override suspend fun getUserProducts(userId: String): Flow<List<Product>> = callbackFlow {
-        val listener = firestore.collection(PRODCUTS_DB)
+        val listener = firestore.collection(PRODUCTS_DB)
             .whereEqualTo("ownerId", userId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -121,7 +121,7 @@ class FirestoreProductRepositoryImpl(
             imageUris.forEachIndexed { index, uri ->
                 try {
                     val imageRef = storage.reference
-                        .child(PRODCUTS_DB)
+                        .child(PRODUCTS_DB)
                         .child(currentUser.uid)
                         .child("${productId}_${index}_${System.currentTimeMillis()}.jpg")
                     
@@ -155,7 +155,7 @@ class FirestoreProductRepositoryImpl(
             val currentUser = auth.currentUser ?: throw Exception("User not authenticated")
 
             // First, get the product to access its image URLs and verify ownership
-            val productDoc = firestore.collection(PRODCUTS_DB).document(productId).get().await()
+            val productDoc = firestore.collection(PRODUCTS_DB).document(productId).get().await()
             val product = productDoc.toObject(Product::class.java)
                 ?: throw Exception("Product not found")
 
@@ -176,7 +176,7 @@ class FirestoreProductRepositoryImpl(
             }
 
             // Delete the product document from Firestore
-            firestore.collection(PRODCUTS_DB).document(productId).delete().await()
+            firestore.collection(PRODUCTS_DB).document(productId).delete().await()
 
             android.util.Log.d("FirestoreRepo", "Successfully deleted product $productId")
             Result.Success(Unit)

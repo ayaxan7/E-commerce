@@ -60,7 +60,7 @@ fun ProductListScreen(
                     tint = Blue500
                 )
             }
-            IconButton(onClick = { viewModel.signOut(); onNavigateToAuth() }) {
+            IconButton(onClick = onNavigateToAuth) {
                 Icon(
                     Icons.AutoMirrored.Filled.ExitToApp,
                     contentDescription = "Sign Out",

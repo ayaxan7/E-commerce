@@ -1,4 +1,4 @@
 package com.ayaan.bazaar.util
 
-val PRODCUTS_DB="products"
-val USER_DB="users"
+const val PRODUCTS_DB="products"
+const val USER_DB="users"
