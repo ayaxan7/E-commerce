@@ -4,8 +4,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -14,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,6 +26,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,11 +63,12 @@ import coil.compose.SubcomposeAsyncImage
             HorizontalPager(
                 state = pagerState, modifier = Modifier.fillMaxSize()
             ) { page ->
+                var reloadKey by remember { mutableStateOf<Int>(0) }
                 Box(
                     modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     SubcomposeAsyncImage(
-                        model = imageUrls[page],
+                        model = imageUrls[page] + "?reload=$reloadKey",
                         contentDescription = "Fullscreen Image ${page + 1}",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Fit,
@@ -72,7 +81,22 @@ import coil.compose.SubcomposeAsyncImage
                                     color = Color.White, modifier = Modifier.size(48.dp)
                                 )
                             }
-                        })
+                        },
+                        error = {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text("Failed to load image", color = Color.White)
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Button(onClick = { reloadKey++ }) {
+                                        Text("Retry")
+                                    }
+                                }
+                            }
+                        }
+                    )
                 }
             }
 

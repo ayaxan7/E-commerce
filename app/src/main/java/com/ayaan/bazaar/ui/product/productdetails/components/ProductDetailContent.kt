@@ -77,8 +77,9 @@ fun ProductDetailContent(
                     HorizontalPager(
                         state = pagerState, modifier = Modifier.fillMaxSize()
                     ) { page ->
+                        var reloadKey by remember { mutableStateOf(0) }
                         SubcomposeAsyncImage(
-                            model = product.imageUrls[page],
+                            model = product.imageUrls[page] + "?reload=$reloadKey",
                             contentDescription = "${product.title} - Image ${page + 1}",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -93,11 +94,24 @@ fun ProductDetailContent(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    LoadingIndicator(
-//                                    modifier = Modifier.size(.dp)
-                                    )
+                                    LoadingIndicator()
                                 }
-                            })
+                            },
+                            error = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text("Failed to load image", color = Color.White)
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        androidx.compose.material3.Button(onClick = { reloadKey++ }) {
+                                            Text("Retry")
+                                        }
+                                    }
+                                }
+                            }
+                        )
                     }
 
                     // Page Indicators
@@ -370,7 +384,8 @@ fun ProductDetailContent(
             FullScreenImageViewer(
                 imageUrls = product.imageUrls,
                 initialIndex = fullScreenImageIndex,
-                onDismiss = { showFullScreenImage = false })
+                onDismiss = { showFullScreenImage = false }
+            )
         }
     }
 }
